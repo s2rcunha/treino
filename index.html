@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e8278">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Meu Treino">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>Meu treino — Controle de corrida</title>
+<style>
+:root{--main:#0e8278;--bg:#f3f6f7;--card:#fff;--text:#172530;--mut:#637280;--line:#dde5e7;--danger:#c43e42;--good:#118765}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',sans-serif;padding:0 14px 55px}button,input,textarea,select{font:inherit}[hidden]{display:none!important}button{cursor:pointer;border:0}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #6bc5bc;outline-offset:2px}
+.app{max-width:700px;margin:auto}.header{position:sticky;top:0;background:var(--bg);z-index:3;padding:16px 0 12px;border-bottom:1px solid var(--line)}h1{font-size:24px;margin:0 0 3px}.sub{color:var(--mut);font-size:13px}.topstats{display:flex;gap:10px;margin:14px 0 0;align-items:center}.progress{flex:1;background:#dde9e6;height:10px;border-radius:20px;overflow:hidden}.fill{height:100%;background:var(--good);width:0;transition:width .2s}.score{white-space:nowrap;color:var(--main);font-weight:800;font-size:13px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}.btn{display:inline-flex;justify-content:center;align-items:center;gap:6px;min-height:43px;padding:10px 13px;border-radius:11px;background:#e4edee;color:var(--text);font-weight:650;font-size:14px}.btn.primary{background:var(--main);color:#fff}.btn.danger{color:var(--danger);background:#fff0f0}.btn.ghost{background:transparent;color:var(--mut)}.btn:disabled{opacity:.45;cursor:not-allowed}.toolbar .btn{flex:1}
+.weeknav{display:flex;align-items:center;gap:8px}.weeknav select{flex:1;min-width:0;background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px;font-weight:700;color:var(--text);min-height:47px}.weeknav .btn{flex:none}.week-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:18px 0 12px}.week-head h2{font-size:19px;margin:0}.workouts{display:grid;gap:11px}.card{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:14px;box-shadow:0 1px 3px #142c3810}.card.done{border-color:#b3ded1;background:#effaf5}.ck{width:29px;height:29px;accent-color:var(--good);flex:none;margin:3px 0 0;cursor:pointer}.content{flex:1;min-width:0}.name{font-size:16px;font-weight:750;overflow-wrap:anywhere}.desc{font-size:14px;color:var(--mut);line-height:1.45;overflow-wrap:anywhere;margin-top:5px}.done .name{text-decoration:line-through;color:var(--mut)}.edit{background:#edf5f5;border:0;border-radius:10px;width:42px;height:42px;flex:none;font-size:19px;color:var(--main)}.empty{text-align:center;padding:30px;background:#fff;border:1px dashed var(--line);border-radius:15px;color:var(--mut)}.hint{font-size:12px;color:var(--mut);line-height:1.5;margin:18px 2px}.info{background:#e8f6f3;border-radius:12px;padding:12px;font-size:13px;color:#25675f;margin-top:10px}
+.modal{position:fixed;inset:0;background:#101a25a8;display:none;align-items:center;justify-content:center;padding:15px;z-index:10}.modal.open{display:flex}.dialog{width:min(100%,470px);background:#fff;border-radius:18px;padding:20px;max-height:90dvh;overflow:auto}.dialog h3{font-size:19px;margin:0 0 10px}.dialog p{color:var(--mut);font-size:14px;line-height:1.5}.field{display:block;margin:13px 0}.field span{display:block;color:var(--mut);font-size:13px;font-weight:650;margin-bottom:5px}.field input,.field textarea{display:block;width:100%;border:1px solid #c9d4d7;border-radius:10px;padding:12px;background:#fff;color:var(--text);font-size:16px}.field textarea{resize:vertical;min-height:78px}.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}.actions .btn{flex:1}.notice{color:var(--danger);font-size:13px;min-height:18px}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);padding:12px 18px;background:#153e3b;color:#fff;border-radius:12px;z-index:20;box-shadow:0 8px 24px #0017;display:none;max-width:90vw;font-size:14px}
+@media(max-width:380px){body{padding:0 10px 40px}.btn{padding:9px 10px;font-size:13px}.card{padding:11px}.week-head h2{font-size:17px}}@media(prefers-color-scheme:dark){:root{--bg:#121a1f;--card:#202b31;--text:#f1f5f6;--mut:#a9bcc3;--line:#35454b;--main:#2ebcaa;--good:#25b98f}.header{background:var(--bg)}.weeknav select,.dialog,.field input,.field textarea{background:var(--card);color:var(--text)}.btn{background:#2c3b42;color:var(--text)}.btn.primary{color:#092b29}.btn.danger{background:#422b30}.card.done{background:#18352d;border-color:#2c745e}.edit{background:#293f41;color:var(--main)}.info{background:#213e39;color:#b8e9db}.empty{background:var(--card)}.dialog{color:var(--text)}}
+</style></head>
+<body><main class="app">
+<header class="header"><h1>🏃 Meu treino</h1><div class="sub">Controle de corridas • progresso salvo no dispositivo</div><div class="topstats"><div class="progress"><div class="fill" id="fill"></div></div><span class="score" id="score">0/0 realizados</span></div></header>
+<div class="toolbar"><button class="btn primary" id="addWeek">＋ Semana</button><button class="btn" id="installApp" hidden>📲 Instalar</button><button class="btn" id="backup">⬇ Backup</button><button class="btn" id="restore">⬆ Restaurar</button><input id="restoreFile" type="file" accept=".json,application/json" hidden></div>
+<div class="weeknav"><button class="btn" id="prev" aria-label="Semana anterior">‹</button><select id="weekSelect" aria-label="Selecionar semana"></select><button class="btn" id="next" aria-label="Próxima semana">›</button></div>
+<div class="week-head"><h2 id="weekName"></h2><div style="display:flex;gap:5px"><button class="btn" id="editWeek">✏️ Renomear</button><button class="btn danger" id="deleteWeek" aria-label="Excluir semana">🗑</button></div></div>
+<section id="workouts" class="workouts"></section>
+<div class="toolbar"><button class="btn primary" id="addWorkout">＋ Adicionar treino</button><button class="btn danger" id="resetDone">Desmarcar treinos</button></div>
+<details class="info"><summary>Ritmos e dicas do plano original</summary><p>Corrida leve: 6:15–6:45 min/km. Ritmo-alvo: 5:00 min/km. Intervalado: 4:30–4:45 min/km. Strides: 100 m, em aceleração controlada.</p><p>Aquecimento: trote leve e mobilidade. Desaquecimento: corrida leve. Se sentir dor, reduza a carga e descanse.</p></details>
+<p class="hint">✓ As marcações e edições são salvas automaticamente neste navegador. Para não perder seus registros ao trocar de celular, limpar dados do navegador ou mudar a localização do arquivo, use <b>Backup</b>. Se abrir o HTML diretamente como arquivo, o armazenamento pode variar entre navegadores.</p>
+</main>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="dialog"><h3 id="modalTitle"></h3><p id="modalMessage"></p><form id="modalForm"><div id="modalFields"></div><div id="modalError" class="notice"></div><div class="actions"><button type="button" class="btn ghost" id="cancelModal">Cancelar</button><button type="submit" class="btn primary" id="submitModal">Salvar</button></div></form></div></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const originalPlan={
+            1: [{day:"Treino A",description:"6×400 m ritmo 4:35-4:45/km"},
+                {day:"Treino B",description:"30 min corrida leve + mobilidade"},
+                {day:"Treino C",description:"2 km ritmo-alvo (≈5:10/km)"},
+                {day:"Treino D",description:"Longão 5 km leve"}],
+            2: [{day:"Treino A",description:"7×400 m ritmo 4:35-4:45/km"},
+                {day:"Treino B",description:"35 min leve + 6×100 m strides"},
+                {day:"Treino C",description:"2,5 km ritmo-alvo"},
+                {day:"Treino D",description:"Longão 6 km leve"}],
+            3: [{day:"Treino A",description:"5×600 m ritmo 4:40-4:50/km"},
+                {day:"Treino B",description:"35 min leve + técnica de passada"},
+                {day:"Treino C",description:"3 km ritmo-alvo"},
+                {day:"Treino D",description:"Longão 7 km progressivo"}],
+            4: [{day:"Treino A",description:"8×400 m ritmo 4:35-4:45/km"},
+                {day:"Treino B",description:"35 min leve + 8×100 m strides"},
+                {day:"Treino C",description:"3,5 km ritmo-alvo"},
+                {day:"Treino D",description:"Longão 8 km progressivo"}],
+            5: [{day:"Treino A",description:"6×600 m ritmo 4:35-4:45/km"},
+                {day:"Treino B",description:"40 min leve + técnica"},
+                {day:"Treino C",description:"4 km ritmo-alvo (≈5:00/km)"},
+                {day:"Treino D",description:"Longão 9 km progressivo"}],
+            6: [{day:"Treino A",description:"5×800 m ritmo 4:35-4:45/km"},
+                {day:"Treino B",description:"40 min leve + 8×100 m strides"},
+                {day:"Treino C",description:"4,5 km ritmo-alvo"},
+                {day:"Treino D",description:"Longão 9 km progressivo"}],
+            7: [{day:"Treino A",description:"10×400 m ritmo 4:30-4:40/km"},
+                {day:"Treino B",description:"30 min leve + técnica"},
+                {day:"Treino C",description:"5 km ritmo-alvo contínuo"},
+                {day:"Treino D",description:"Longão 7 km leve"}],
+            8: [{day:"Treino A",description:"4×800 m ritmo 4:30-4:40/km (forte)"},
+                {day:"Treino B",description:"25 min leve + 4×100 m strides"},
+                {day:"Treino C",description:"Teste final – 5 km a 5:00/km"},
+                {day:"Treino D",description:"6 km soltura"}]
+        };
+const STORAGE='meu_treino_controle_v2';
+const oldProgress='plan5k_progress';
+const oldWeek='plan5k_selectedWeek';
+const freshId=()=> 'id_'+((typeof crypto!=='undefined'&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));
+function defaults(){let past={};try{past=JSON.parse(localStorage.getItem(oldProgress)||'{}')||{}}catch{};return {version:2,selected:0,weeks:Object.entries(originalPlan).map(([num,arr])=>({id:'week-'+num,name:'Semana '+num,workouts:arr.map((w,i)=>({id:'w'+num+'_'+i,name:w.day,description:w.description,done:!!past['w'+num+'_'+i]}))}))}}
+let data;
+try{const raw=localStorage.getItem(STORAGE);data=raw?JSON.parse(raw):defaults();if(!raw){const old=Number(localStorage.getItem(oldWeek));if(Number.isInteger(old)&&old>=1&&old<=8)data.selected=old-1}}catch(e){data=defaults()}
+function valid(d){return !!d&&Array.isArray(d.weeks)&&d.weeks.length>0&&d.weeks.length<=150&&d.weeks.every(w=>typeof w.id==='string'&&typeof w.name==='string'&&Array.isArray(w.workouts)&&w.workouts.length<=100&&w.workouts.every(t=>typeof t.id==='string'&&typeof t.name==='string'&&typeof t.description==='string'&&typeof t.done==='boolean'))}
+if(!valid(data))data=defaults();
+const $=id=>document.getElementById(id);
+function save(){try{localStorage.setItem(STORAGE,JSON.stringify(data));return true}catch(e){showToast('Não foi possível salvar. Faça backup e verifique armazenamento.');return false}}
+let toastTimer;function showToast(msg){const e=$('toast');e.textContent=msg;e.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.style.display='none',3500)}
+const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const selectedWeek=()=>data.weeks[data.selected];
+function render(){data.selected=Math.max(0,Math.min(data.selected,data.weeks.length-1));const s=$('weekSelect');s.innerHTML='';data.weeks.forEach((w,i)=>{const opt=document.createElement('option');opt.value=i;opt.textContent=w.name;opt.selected=i===data.selected;s.append(opt)});
+ const w=selectedWeek();$('weekName').textContent=w.name;$('prev').disabled=data.selected===0;$('next').disabled=data.selected===data.weeks.length-1;
+ let count=0,total=0;for(const x of data.weeks){for(const t of x.workouts){total++;if(t.done)count++}}$('score').textContent=count+'/'+total+' realizados';$('fill').style.width=(total?count*100/total:0)+'%';
+ const out=$('workouts');out.innerHTML='';if(!w.workouts.length){out.innerHTML='<div class="empty">Nenhum treino nesta semana. Adicione um treino abaixo.</div>';return}
+ w.workouts.forEach((t,i)=>{const el=document.createElement('article');el.className='card'+(t.done?' done':'');el.innerHTML=`<input class="ck" type="checkbox" aria-label="Marcar ${escapeHtml(t.name)}" ${t.done?'checked':''}><div class="content"><div class="name">${escapeHtml(t.name)}</div><div class="desc">${escapeHtml(t.description)}</div></div><button type="button" class="edit" aria-label="Editar treino" title="Editar treino">✎</button><button type="button" class="edit delete" aria-label="Excluir treino" title="Excluir treino" style="color:var(--danger)">🗑</button>`;el.querySelector('input').addEventListener('change',ev=>{t.done=ev.target.checked;save();render()});el.querySelector('.edit').addEventListener('click',()=>editWorkout(i));el.querySelector('.delete').addEventListener('click',()=>deleteWorkout(i));out.append(el)})}
+let dialogResolve=null;
+function openDialog({title,message='',fields=[],confirmLabel='Salvar',danger=false}){return new Promise(resolve=>{dialogResolve=resolve;$('modalTitle').textContent=title;$('modalMessage').textContent=message;$('modalMessage').style.display=message?'':'none';$('modalError').textContent='';$('modalFields').innerHTML='';for(const f of fields){const label=document.createElement('label');label.className='field';const cap=document.createElement('span');cap.textContent=f.label;label.append(cap);const el=document.createElement(f.multiline?'textarea':'input');el.name=f.key;el.value=f.value||'';el.required=f.required!==false;el.maxLength=f.maxLength||200;label.append(el);$('modalFields').append(label)}$('submitModal').textContent=confirmLabel;$('submitModal').classList.toggle('danger',danger);$('modal').classList.add('open');const first=$('modalFields').querySelector('input,textarea');if(first)setTimeout(()=>first.focus(),40)})}
+function closeDialog(value){$('modal').classList.remove('open');const r=dialogResolve;dialogResolve=null;if(r)r(value)}
+$('cancelModal').onclick=()=>closeDialog(null);
+$('modalForm').onsubmit=e=>{e.preventDefault();const obj={};for(const el of $('modalFields').querySelectorAll('input,textarea')){const value=el.value.trim();if(el.required&&!value){$('modalError').textContent='Preencha todos os campos obrigatórios.';el.focus();return}obj[el.name]=value}closeDialog(obj)};
+function askConfirm(title,message,label='Confirmar'){return openDialog({title,message,confirmLabel:label}) .then(x=>x!==null)}
+$('weekSelect').onchange=e=>{data.selected=Number(e.target.value);save();render()};$('prev').onclick=()=>{data.selected--;save();render()};$('next').onclick=()=>{data.selected++;save();render()};
+$('addWeek').onclick=async()=>{const a=await openDialog({title:'Adicionar semana',fields:[{key:'name',label:'Nome da semana',value:'Semana '+(data.weeks.length+1)}]});if(!a)return;data.weeks.push({id:freshId(),name:a.name,workouts:[]});data.selected=data.weeks.length-1;save();render();showToast('Semana adicionada')};
+$('editWeek').onclick=async()=>{const w=selectedWeek();const a=await openDialog({title:'Renomear semana',fields:[{key:'name',label:'Nome da semana',value:w.name}]});if(!a)return;w.name=a.name;save();render()};
+$('deleteWeek').onclick=async()=>{const w=selectedWeek();if(data.weeks.length===1)return showToast('É preciso manter pelo menos uma semana.');if(!(await askConfirm('Excluir esta semana?',`Deseja excluir “${w.name}” e todos os seus treinos?`, 'Excluir semana')))return;data.weeks.splice(data.selected,1);data.selected=Math.min(data.selected,data.weeks.length-1);save();render()};
+$('addWorkout').onclick=async()=>{const w=selectedWeek();const a=await openDialog({title:'Adicionar treino',fields:[{key:'name',label:'Nome do treino',value:'Treino '+(w.workouts.length+1)},{key:'description',label:'Descrição do treino',value:'',multiline:true,required:false,maxLength:1000}]});if(!a)return;w.workouts.push({id:freshId(),name:a.name,description:a.description,done:false});save();render()};
+async function editWorkout(i){const w=selectedWeek(),t=w.workouts[i];const a=await openDialog({title:'Editar treino',fields:[{key:'name',label:'Nome do treino',value:t.name},{key:'description',label:'Descrição do treino',value:t.description,multiline:true,required:false,maxLength:1000}]});if(!a)return;t.name=a.name;t.description=a.description;save();render();}
+async function deleteWorkout(i){const w=selectedWeek();if(!(await askConfirm('Excluir treino?',`Excluir “${w.workouts[i].name}”?`, 'Excluir treino')))return;w.workouts.splice(i,1);save();render()}
+$('resetDone').onclick=async()=>{if(!(await askConfirm('Desmarcar todos os treinos?','As marcações de todas as semanas serão apagadas, mas os nomes e os treinos serão mantidos.','Desmarcar')))return;data.weeks.forEach(w=>w.workouts.forEach(t=>t.done=false));save();render();showToast('Marcações removidas')};
+$('backup').onclick=()=>{const blob=new Blob([JSON.stringify({format:'meu-treino-controle',version:2,exportedAt:new Date().toISOString(),data},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='backup-meu-treino-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000)};
+$('restore').onclick=()=>$('restoreFile').click();
+$('restoreFile').onchange=async e=>{const file=e.target.files[0];e.target.value='';if(!file)return;try{const text=await file.text(),parsed=JSON.parse(text),newData=parsed?.data;if(parsed.format!=='meu-treino-controle'||!valid(newData))throw Error('Formato de backup incompatível');if(!(await askConfirm('Restaurar backup?','Isso substituirá as semanas, nomes e marcações atuais pelos dados do arquivo.','Restaurar')))return;data=newData;data.selected=Math.min(Number(data.selected)||0,data.weeks.length-1);save();render();showToast('Backup restaurado')}catch(err){showToast('Erro: '+err.message)}};
+// PWA: atualização offline e instalação.
+let deferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',event=>{
+  event.preventDefault();deferredInstallPrompt=event;
+  $('installApp').hidden=false;
+});
+$('installApp').addEventListener('click',async()=>{
+  if(!deferredInstallPrompt){showToast('Use a opção Adicionar à Tela de Início do navegador.');return}
+  const prompt=deferredInstallPrompt;
+  deferredInstallPrompt=null;
+  $('installApp').hidden=true;
+  await prompt.prompt();
+});
+window.addEventListener('appinstalled',()=>{$('installApp').hidden=true;deferredInstallPrompt=null;showToast('Aplicativo instalado!')});
+if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>showToast('Não foi possível ativar o modo offline.')));
+}
+save();render();
+</script></body></html>
